@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}
+    home.html
+{% endblock title%}
+{% load static %}
+{% load staticfiles %}
+{% load index %}
+{% block extrastyle %}
+
+{% endblock %}
+
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">졸업 학점 확인</h1>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <div class="table-responsive">
+                            <!--공학 인증 요건 확인 및 추가 필요-->
+                            <table class="table table-bordered table-hover table-striped">
+                                <tbody>
+                                <tr>
+                                    <td>졸업 기준</td>
+                                    <td>필요 학점</td>
+                                    <td>현재 학점</td>
+                                    <td>남은 학점</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'grades:total' %}">전체 학점</a></td>
+                                    <td>136</td>
+                                    {% with c=136 %}
+                                        {% if c|to_int > total_grade|to_int %}
+                                            <td >{{ total_grade|floatformat:"0" }}</td>
+                                        {% elif c|to_int <= total_grade|to_int %}
+                                            <td >{{ total_grade|floatformat:"0" }}</td> <!--전체 학점-->
+                                        {% endif %}
+
+                                        {% if c|to_int <= total_grade %}
+                                            <td class="info">{{ 0 }}</td>
+                                        {% else %}
+                                            <td class="danger">{{ c|subtract:total_grade|floatformat:"0" }}</td>
+                                        {% endif %}
+                                    {% endwith %}
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'grades:major' %}">전공 학점</a></td>
+                                    <td>67</td>
+                                    {% with c=67 %}
+                                        {% if c|to_int > major_grade|to_int %}
+                                            <td >{{ major_grade|floatformat:"0" }}</td>
+                                        {% elif c|to_int <= major_grade|to_int %}
+                                            <td >{{ major_grade|floatformat:"0" }}</td> <!--전공 학점-->
+                                        {% endif %}
+
+                                        {% if c|to_int <= major_grade %}
+                                            <td class="info">{{ 0 }}</td>
+                                        {% else %}
+                                            <td class="danger">{{ c|subtract:major_grade|floatformat:"0" }}</td>
+                                        {% endif %}
+                                    {% endwith %}
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'grades:ge' %}">교양 학점</a></td>
+                                    <td>47</td>
+                                    {% with c=47 %}
+                                        {% if c|to_int > ge_grade|to_int %}
+                                            <td >{{ ge_grade|floatformat:"0" }}</td>
+                                        {% elif c|to_int <= ge_grade|to_int %}
+                                            <td >{{ ge_grade|floatformat:"0" }}</td> <!--교양 학점-->
+                                        {% endif %}
+
+                                        {% if c|to_int <= ge_grade %}
+                                            <td class="info">{{ 0 }}</td>
+                                        {% else %}
+                                            <td class="danger">{{ c|subtract:ge_grade|floatformat:"0" }}</td>
+                                        {% endif %}
+                                    {% endwith %}
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'grades:msc' %}">MSC 학점</a></td>
+                                    <td>24</td>
+                                    {% with c=24 %}
+                                        {% if c|to_int > msc_grade|to_int %}
+                                            <td >{{ msc_grade|floatformat:"0" }}</td>
+                                        {% elif c|to_int <= msc_grade|to_int %}
+                                            <td >{{ msc_grade|floatformat:"0" }}</td> <!--MSC 학점-->
+                                        {% endif %}
+
+                                        {% if c|to_int <= msc_grade %}
+                                            <td class="info">{{ 0 }}</td>
+                                        {% else %}
+                                            <td class="danger">{{ c|subtract:msc_grade|floatformat:"0" }}</td>
+                                        {% endif %}
+                                    {% endwith %}
+                                </tr>
+                                <tr>
+                                    <td>설계 학점</td>
+                                    <td>12</td>
+                                    {% with c=12 %}
+                                        {% if c|to_int > design_grade|to_int %}
+                                            <td >{{ design_grade }}</td>
+                                        {% elif c|to_int <= design_grade|to_int %}
+                                            <td >{{ design_grade }}</td> <!--설계 학점-->
+                                        {% endif %}
+
+                                        {% if c|to_int <= design_grade %}
+                                            <td class="info">{{ 0 }}</td>
+                                        {% else %}
+                                            <td class="danger">{{ c|subtract:design_grade }}</td>
+                                        {% endif %}
+                                    {% endwith %}
+                                </tr>
+                                <tr>
+                                    <td>공학 인증 교양 학점</td>
+                                    <td>9</td>
+                                    {% with c=9 %}
+                                        {% if c|to_int > engineer_cer_ge_grade|to_int %}
+                                            <td >{{ engineer_cer_ge_grade|floatformat:"0" }}</td>
+                                        {% elif c|to_int <= engineer_cer_ge_grade|to_int %}
+                                            <td >{{ engineer_cer_ge_grade|floatformat:"0" }}</td> <!--공학 인증 교양 학점-->
+                                        {% endif %}
+
+                                        {% if c|to_int <= engineer_cer_ge_grade %}
+                                            <td class="info">{{ 0 }}</td>
+                                        {% else %}
+                                            <td class="danger">{{ c|subtract:engineer_cer_ge_grade|floatformat:"0" }}</td>
+                                        {% endif %}
+                                    {% endwith %}
+                                </tr>
+                                </tbody>
+                            </table>
+                        <hr>
+                            <!-- 학기별로 듣지 않은 전공 과목 리스트 보여주기 -->
+                            <h3 style="padding-bottom: 10px">수강하지 않은 전공 과목</h3>
+                            <table class="table table-bordered table-hover table-striped">
+                                {% for semesterlist in list %}
+                                    {% if semesterlist %}
+                                        <tr>
+                                        <td><strong>{{ forloop.counter0|change_semester }}</strong></td>
+                                            {% for grade in semesterlist %}
+                                                <td class="success">{{ grade }}</td>
+{#                                                <td class="col-xs-3 col-sm-2">{{ grade }}</td>#}
+                                            {% endfor %}
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+{% endblock content %}
+
+{% block footer %}
+    <div id="footer">
+        &copy; Hansol Ju 2018
+    </div>
+{% endblock footer%}
+
+{% comment %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="{% static "js/bootstrap.js" %}"></script>{% endcomment %}
