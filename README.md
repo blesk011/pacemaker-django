@@ -4,8 +4,7 @@
 2018학년도 경기대학교 컴퓨터과학과 캡스톤 프로젝트 - Pacemaker
 
 ## Poster
-
-
+![Pacemaker](./readme-image/Pacemaker.jpg)
 
 ## Demo
 [Demo](https://www.youtube.com/watch?v=DQlWVJVevPo)
